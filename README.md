@@ -1,9 +1,9 @@
 # Real Time EBike Tracking System
 
 This project is done by
-Syed Ahmed Zaki (1322363)
-Md Ibrahim Khalil (1341580)
-Nikhitha Yerrathota (1293858)
+Syed Ahmed Zaki, 
+Md Ibrahim Khalil, 
+Nikhitha Yerrathota
 
 Under the supervision of
 Prof. Dr.-Ing. Matthias Deegener
