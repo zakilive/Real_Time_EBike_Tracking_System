@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <title>Real Time Ebike Location Tracker</title>
+    <!--- In below codes calling here PubNub Library SDK and BootStrap SDK for Buttons --->
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+  </head>
+  <body>
+  
+     <div class="container">
+       <center> 
+       <h1>Welcome To Real Time Ebike Location Tracker</h1>
+       <p>By Team 2, Frankfurt University of Applied Science</p>
+        <button class="btn btn-success" id="track_button">Start Ebike Tracking</button>
+        </center> <!--- Setting google map size inside ebike.html file --->
+        <div id="map_size" style="width:1000px;height:550px"></div>
+        <center><div id="map_size"></div>
+       </center>
+     </div>
+    </div>
+       
+      <script>
+        //The below codes are referenced from this blog https://www.pubnub.com/blog/javascript-google-maps-api-flight-paths/
+        //window.lat and window.lng is needful to pin a point on Frankfurt am Main specific area inside the google map
+        window.latitude = 50.11;
+        window.longitude = 8.68;
+
+        var mapping;
+        var marking;
+        var coordinate_update=[];
+        //initializing the google map functionality Reference: https://developers.google.com/maps/documentation/javascript/examples/map-simple
+        var initialize_google_map = function mapInitializeGoogle() {
+			mapping  = new google.maps.Map(document.getElementById('map_size'), {center:{lat:latitude,lng:longitude},zoom:15});
+			marking = new google.maps.Marker({position:{lat:latitude, lng:longitude}, map:mapping});
+        };
+        
+        window.initialize_in_html = initialize_google_map;
+        //Reference: https://sparklers-the-makers.github.io/blog/robotics/realtime-gps-tracker-with-raspberry-pi/
+        var updated_location = function(payload) {
+          if(payload.message.lat){
+          latitude_update = payload.message.lat;
+          longitude_update = payload.message.lng;
+          
+  
+          //it is option to set the updated location position in the map
+          mapping.setCenter({lat:latitude_update, lng:longitude_update});
+          marking.setPosition({lat:latitude_update, lng:longitude_update});
+        
+          coordinate_update.push(new google.maps.LatLng(latitude_update, longitude_update)); //For showing the last updated location of rider in the map
+          
+          }
+        };       
+
+        var pubnub_channel = "ebike_locator"; //it is the same channel name for PubNub API which also mentioned in ebike.py
+        //publishKey and subscribeKey below is PubNub authentication data to our account in PubNub/The same authentication data we also used in ebike.py
+        var pubnub_authentication = new PubNub({
+           publishKey:   'your_PubNub_publish_key',
+           subscribeKey: 'your_PubNub_subscribe_key'
+        });
+
+        document.querySelector('#track_button').addEventListener('click', function(){
+        var text_in_button = document.getElementById("track_button").textContent;
+        if(text_in_button == "Start Ebike Tracking"){
+            pubnub_authentication.subscribe({channels: [pubnub_channel]});
+            pubnub_authentication.addListener({message:updated_location});
+            document.getElementById("track_button").classList.add('btn-danger'); //btn-danger is red bootstrap button
+            document.getElementById("track_button").classList.remove('btn-success'); //btn-success is green bootstrap button
+            document.getElementById("track_button").textContent = 'Stop Ebike Tracking';
+        }
+        else{
+            pubnub_authentication.unsubscribe( {channels: [pubnub_channel] });
+            document.getElementById("track_button").classList.remove('btn-danger');
+            document.getElementById("track_button").classList.add('btn-success');
+            document.getElementById("track_button").textContent = 'Start Ebike Tracking';
+        }
+        });
+      </script>
+<!--- Followed GoogleMap API documentation from https://developers.google.com/maps/documentation/javascript/adding-a-google-map#key --->
+<!--- Used GoogleMap API authentication key for our Google developer account in the url below --->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=your_google_API_key&callback=initialize_google_map"></script>
+
+</body>
+
+</html>

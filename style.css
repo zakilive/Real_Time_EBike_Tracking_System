@@ -1,0 +1,67 @@
+body {
+    background-image:"n4.png";
+    background-size: cover;
+    font-family:'Poppins',sans-serif;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    }
+    h1{
+        color:rgb(228, 255, 73);
+    }
+    
+#form {
+    width: 300px;
+    margin: 21vh auto 0 auto;
+    padding: 21px;
+    background-color: rgb(238, 231, 231);
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+#form h1 {
+    color: #0a0deb;
+    text-align: center;
+}
+
+#form button {
+    padding: 11px;
+    margin-top: 11px;
+    width: 100%;
+    color: white;
+    background-color: rgb(41, 57, 194);
+    border: none;
+    border-radius: 5px;
+}
+
+.input-control {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-control input {
+    border: 2px solid #e4e3e3;
+	border-radius: 6px;
+	display: block;
+	font-size: 13px;
+	padding: 11px;
+	width: 100%;
+}
+
+.input-control input:focus {
+    outline: 0;
+}
+
+.input-control.success input {
+    border-color: #06e685;
+}
+
+.input-control.error input {
+    border-color: rgb(248,3,52)
+}
+
+.input-control .error {
+    color: rgb(248, 3, 52);
+    font-size: 8px;
+    height: 11px;
+}
